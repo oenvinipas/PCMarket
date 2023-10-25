@@ -2,6 +2,8 @@ from flask import Flask, request, redirect, render_template
 
 app = Flask(__name__)
 
+db = dict()
+
 @app.get("/")
 def get_all_listings_page():
     return render_template('index.html')
