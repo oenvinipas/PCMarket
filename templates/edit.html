@@ -1,8 +1,54 @@
 {% extends '_template.html' %}
-{% block title %}PCMarket | Editing {{listing_id}}{% endblock %}
+{% block title %}PCMarket | Edit {{listing_id}}{% endblock %}
 
 {% block body %}
 
-<h1>editing {{listing_id}}</h1>
+<h1 class="mb-5">Edit existing PC information below:</h1>
+<p class="mb-3">If your device does not contain one of these or you are unsure, input "N/A"</p>
+
+<form action="/listings/{{ listing_id }}" method="POST">
+    <h2>Computer Details</h2>
+    <div class="mb-3">
+        <label for="case-name" class="form-label">Case</label>
+        <input type="text" name="case-name" class="form-control" id="case-name" value="{{ current_case }}">
+    </div>
+    <div class="mb-3">
+        <label for="cpu-name">CPU</label>
+        <input type="text" name="cpu-name" class="form-control" id="cpu-name" value="{{ current_cpu }}">
+    </div>
+    <div class="mb-3">
+        <label for="gpu-name">GPU</label>
+        <input type="text" name="gpu-name" class="form-control" id="cpu-name" value="{{ current_gpu }}">
+    </div>
+    <div class="mb-3">
+        <label for="ram-name">RAM</label>
+        <input type="text" name="ram-name" class="form-control" id="ram-name" value="{{ current_ram }}">
+    </div>
+    <div class="mb-3">
+        <label for="memory-size">Memory</label>
+        <input type="text" name="memory-size" class="form-control" id="memory-size" value="{{ current_memory }}">
+    </div>
+    <div class="mb-3">
+        <label for="fans">Fans</label>
+        <input type="text" name="fans" class="form-control" id="fans" value="{{ current_fans }}">
+    </div>
+    <div class="mb-3">
+        <label for="power-supply">Power Supply</label>
+        <input type="text" name="power-supply" class="form-control" id="power-supply" value="{{ current_power_supply }}">
+    </div>
+    <div class="mb-3">
+        <label for="condition">Condition</label>
+        <input type="text" name="condition" class="form-control" id="condition" value="{{ current_condition }}">
+    </div>
+    <div class="mb-3">
+        <label for="rgb">RGB</label>
+        <input type="checkbox" name="rgb" class="form-control" id="rgb" value="{{ current_rgb }}">
+    </div>
+    <div class="mb-3">
+        <label for="comments">Comments:</label>
+        <textarea class="form-control" id="comments" name="comments" rows="5" value=" {{ current_comments }}"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Listing</button>
+</form>
 
 {% endblock %}
