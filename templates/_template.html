@@ -7,39 +7,43 @@
       <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg d-flex justify-content-between">
-        <div class="ms-5">
-            <a class="navbar-brand" href="/"><img style="width: 80px; height: auto;" src="../static/images/projectLogo.png" alt="mock logo image"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div>
-            <form class="form-inline my-2">
-                <div class="d-flex">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </div>
-            </form>
-        </div>
-        <div class="me-5">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Listings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/create">Create a Listing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/signup">Sign Up</a>
-                    </li>
-                </ul>
+    <nav class="navbar navbar-expand-lg bg-primary d-flex justify-content-between opacity-75">
+        <!-- <div> -->
+            <div>
+                <a class="navbar-brand" href="/"><img style="width: 80px; height: auto;" src="../static/images/projectLogo.png" alt="PCMarket Logo"></a>
             </div>
-        </div>
+            <div>
+                <form class="form-inline my-2">
+                    <div class="d-flex gap-2">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Listings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/create">Create a Listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/signup">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="me-5">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        <!-- </div> -->
     </nav>
 
     <main class="container">

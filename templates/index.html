@@ -3,6 +3,46 @@
 
 {% block body %}
 
-<h1>hello from index.html page</h1>
+<div class="container">
+    <div class="row">
+        {% for key, value in db.items(): %}
+        <div class="col-sm m-2">
+            <div class="card" style="width: 18rem; border: none;">
+                <img class="card-img-top" src="{{value[4]}}" alt="pc image">
+                <div class="card-body">
+                    <h5 class="card-title">{{key}}</h5>
+                    <ul>
+                        {% for idx in range(value|length - 1) %}
+                            <li>{{value[idx]}}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="#" class="btn btn-primary py-2 px-3 w-100 opacity-75">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+        <!-- <div class="col-sm border border-primary">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm border border-primary">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div> -->
+</div>
 
 {% endblock %}
