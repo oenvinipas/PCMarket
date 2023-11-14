@@ -3,7 +3,74 @@
 
 {% block body %}
 
-<h1>hello from create.html page</h1>
+<div class="justify-content-center mt-5 text-center p-3">
+    <h3>Please enter all relevant device information into the form below:</h3>
+</div>
+<div class="mt-2 text-center"> 
+    <p>If the device does not contain one of these or you are unsure, input “N/A”</p>
+</div>
+<div class="container">
+    <form class="border border-dark border-2 bg-light w-50 mx-auto p-3">
+        <p class="p-2 h6 font-weight-bold">Computer Details</p>
+        <div class="row p-2">
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case">
+            </div>
+            <div class="col">
+                <div class="mt-3 p-3">
+                    <input class="form-check-input border border-dark" type="checkbox" value="" id="rgb">
+                    <label class="form-check-label" for="rgb">
+                      RGB
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col">
+                <label for="comments" class="form-label">Comments</label>
+                <textarea type="text" class="form-control border border-dark" id="comments" rows="4"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-3">
+                <button type="submit" class="btn btn-primary float-end">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
 
