@@ -15,43 +15,50 @@
         <div class="row p-2">
             <div class="col">
                 <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
+                <input type="text" class="form-control border border-dark" id="computer_case" required>
             </div>
             <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
+                <label for="cpu" class="form-label">CPU</label>
+                <input type="text" class="form-control border border-dark" id="cpu" required>
             </div>
             <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
-            </div>
-        </div>
-        <div class="row p-2">
-            <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
-            </div>
-            <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
-            </div>
-            <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
+                <label for="gpu" class="form-label">GPU</label>
+                <input type="text" class="form-control border border-dark" id="gpu" required>
             </div>
         </div>
         <div class="row p-2">
             <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
+                <label for="ram" class="form-label">RAM</label>
+                <input type="text" class="form-control border border-dark" id="ram" required>
             </div>
             <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case">
+                <label for="memory" class="form-label">Memory</label>
+                <input type="text" class="form-control border border-dark" id="memory" required>
+            </div>
+            <div class="col">
+                <label for="fans" class="form-label">Fans</label>
+                <input type="text" class="form-control border border-dark" id="fans" required>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col">
+                <label for="power_supply" class="form-label">Power Supply</label>
+                <input type="text" class="form-control border border-dark" id="power_supply" required>
+            </div>
+            <div class="col">
+                <label for="condition" class="form-label">Condition</label>
+                <select class="form-select" aria-label="condition" required>
+                    <option selected disabled>Choose a wear</option>
+                    <option value="1">Factory New</option>
+                    <option value="2">Minimal Wear</option>
+                    <option value="3">Field Tested</option>
+                    <option value="4">Well Worn</option>
+                    <option value="5">Battle Scarred</option>
+                </select>
             </div>
             <div class="col">
                 <div class="mt-3 p-3">
-                    <input class="form-check-input border border-dark" type="checkbox" value="" id="rgb">
+                    <input class="form-check-input border border-dark" type="checkbox" value="" id="rgb" required>
                     <label class="form-check-label" for="rgb">
                       RGB
                     </label>
@@ -73,5 +80,3 @@
 </div>
 
 {% endblock %}
-
-<!-- Joshua's Page -->
