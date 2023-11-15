@@ -37,6 +37,11 @@ def get_account_signup_page():
 
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
+    pc_name = f"PC {listing_id}"
+    if pc_name in db:
+        pc_specs = db[pc_name]
+        pc_image = pc_specs[-1]  # image URL is the last element in the list
+        return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
     # use listing_id to index through the dictionary "db" to get the PC Title then pass that instead of the listing_id
     return render_template("iso-view.html", listing_id=listing_id)
 
