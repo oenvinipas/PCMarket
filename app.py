@@ -1,20 +1,28 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template
+from models import User, db
 
-from models import User
+load_dotenv()
 
 app = Flask(__name__)
 
-db = {
-    "PC 1": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 2": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 3": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 4": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 5": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 6": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 7": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 8": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-    "PC 9": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-}
+app.config["SQLALCHEMY_DATABASE_URI"] = \
+    f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
+
+db.init_app(app)
+
+# db = {
+#     "PC 1": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 2": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 3": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 4": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 5": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 6": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 7": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 8": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+#     "PC 9": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
+# }
 
 
 @app.get("/")
@@ -36,29 +44,32 @@ def get_account_login_page():
 def get_account_signup_page():
     return render_template("signup.html")
 
+
 @app.post("/signup")
 def process_signup_request():
-    password = request.form.get('password')
+    password = request.form.get("password")
     re_password = request.form.get("re-password")
-    email = request.form.get('email')
+    email = request.form.get("email")
     if password != re_password or not email or not password:
         abort(400)
-    
+
     new_user = User(email, password)
     db.session.add(new_user)
     db.session.commit()
-    return redirect('/')
+    return redirect("/account")
 
 
+# TODO: Integrate with database
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
-    pc_name = f"PC {listing_id}"
-    if pc_name not in db:
-        abort(404)
-        
-    pc_specs = db[pc_name]
-    pc_image = pc_specs[-1]  # image URL is the last element in the list
-    return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
+    # pc_name = f"PC {listing_id}"
+    # if pc_name not in db:
+    #     abort(404)
+
+    # pc_specs = db[pc_name]
+    # pc_image = pc_specs[-1]  # image URL is the last element in the list
+    # return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
+    return render_template("iso-view.html")
 
 
 @app.get("/edit/<int:listing_id>")
