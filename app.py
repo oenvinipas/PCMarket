@@ -1,4 +1,6 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, abort, request, redirect, render_template
+
+from models import User
 
 app = Flask(__name__)
 
@@ -34,16 +36,29 @@ def get_account_login_page():
 def get_account_signup_page():
     return render_template("signup.html")
 
+@app.post("/signup")
+def process_signup_request():
+    password = request.form.get('password')
+    re_password = request.form.get("re-password")
+    email = request.form.get('email')
+    if password != re_password or not email or not password:
+        abort(400)
+    
+    new_user = User(email, password)
+    db.session.add(new_user)
+    db.session.commit()
+    return redirect('/')
+
 
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
     pc_name = f"PC {listing_id}"
-    if pc_name in db:
-        pc_specs = db[pc_name]
-        pc_image = pc_specs[-1]  # image URL is the last element in the list
-        return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
-    # use listing_id to index through the dictionary "db" to get the PC Title then pass that instead of the listing_id
-    return render_template("iso-view.html", listing_id=listing_id)
+    if pc_name not in db:
+        abort(404)
+        
+    pc_specs = db[pc_name]
+    pc_image = pc_specs[-1]  # image URL is the last element in the list
+    return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
 
 
 @app.get("/edit/<int:listing_id>")
