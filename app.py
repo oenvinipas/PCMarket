@@ -33,8 +33,8 @@ bcrypt.init_app(app)
 
 @app.context_processor
 def inject_data():
-    session_email = session.get('email', "Guest")
-    return {"session_email": session_email}
+    session_first_name = session.get('first_name', "Guest")
+    return {"session_first_name": session_first_name}
 
 
 @app.get("/")
@@ -74,7 +74,7 @@ def process_login_request():
 
 @app.get("/signup")
 def get_account_signup_page():
-    if "email" in session:
+    if "first_name" in session:
         return redirect("/profile")
     return render_template("signup.html")
 
@@ -84,7 +84,8 @@ def process_signup_request():
     raw_password = request.form.get("password")
     raw_re_password = request.form.get("re-password")
     email = request.form.get("email")
-    if raw_password != raw_re_password or not email or not raw_password:
+    first_name = request.form.get("first_name")
+    if raw_password != raw_re_password or not email or not raw_password or not first_name:
         abort(400)
 
     existing_user = User.query.filter_by(email=email).first()
@@ -92,7 +93,7 @@ def process_signup_request():
         abort(400)
 
     hashed_password = bcrypt.generate_password_hash(raw_password, 12).decode()
-    new_user = User(email, hashed_password)
+    new_user = User(email, hashed_password, first_name)
     db.session.add(new_user)
     db.session.commit()
     return redirect("/login")
