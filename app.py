@@ -50,7 +50,7 @@ def get_create_listing_page():
 @app.get("/login")
 def get_account_login_page():
     if "email" in session:
-        return redirect("/profile")
+        return redirect("/account")
     return render_template("login.html")
 
 
@@ -67,15 +67,18 @@ def process_login_request():
 
     if not bcrypt.check_password_hash(existing_user.password, raw_password):
         abort(401)
+    
+    # first_name = existing_user.first_name
 
     session["email"] = email
+    session["first_name"] = existing_user.first_name
     return redirect("/account")
 
 
 @app.get("/signup")
 def get_account_signup_page():
-    if "first_name" in session:
-        return redirect("/profile")
+    if "email" in session:
+        return redirect("/account")
     return render_template("signup.html")
 
 
@@ -122,11 +125,11 @@ def get_edit_page(listing_id: int):
 def get_account_page():
     if "email" not in session:
         abort(401)
-    # the email is gonna get replaced by the user's first and last name
-    return render_template("account.html", email=session["email"])
+    return render_template("account.html")
 
 
 @app.post("/logout")
 def logout():
     del session["email"]
+    del session["first_name"]
     return redirect("/")
