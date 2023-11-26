@@ -29,12 +29,21 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/create">Create a Listing</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Log In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/signup">Sign Up</a>
-                        </li>
+                        {% if session_email == "Guest" %}
+                          <li class="nav-item">
+                          <li class="nav-item">
+                              <a class="nav-link" href="/login">Log In</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="/signup">Sign Up</a>
+                          </li>
+                        {% else %}
+                          <li class="nav-item">
+                              <form action="/logout" method="post">
+                                <button type="submit" class="nav-link">Logout</a>
+                              </form>
+                          </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

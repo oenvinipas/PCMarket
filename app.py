@@ -1,16 +1,22 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, abort, request, redirect, render_template
+from flask import Flask, abort, request, redirect, render_template, session
 from models import User, db
+from flask_bcrypt import Bcrypt
 
 load_dotenv()
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = \
-    f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
+
+app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
 
 db.init_app(app)
+bcrypt = Bcrypt()
+bcrypt.init_app(app)
 
 # db = {
 #     "PC 1": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
@@ -25,6 +31,12 @@ db.init_app(app)
 # }
 
 
+@app.context_processor
+def inject_data():
+    session_email = session.get('email', "Guest")
+    return {"session_email": session_email}
+
+
 @app.get("/")
 def get_all_listings_page():
     return render_template("index.html", db=db)
@@ -37,26 +49,53 @@ def get_create_listing_page():
 
 @app.get("/login")
 def get_account_login_page():
+    if "email" in session:
+        return redirect("/profile")
     return render_template("login.html")
+
+
+@app.post("/login")
+def process_login_request():
+    raw_password = request.form.get("password")
+    email = request.form.get("email")
+    if not raw_password or not email:
+        abort(401)
+
+    existing_user = User.query.filter_by(email=email).first()
+    if not existing_user:
+        abort(401)
+
+    if not bcrypt.check_password_hash(existing_user.password, raw_password):
+        abort(401)
+
+    session["email"] = email
+    return redirect("/account")
 
 
 @app.get("/signup")
 def get_account_signup_page():
+    if "email" in session:
+        return redirect("/profile")
     return render_template("signup.html")
 
 
 @app.post("/signup")
 def process_signup_request():
-    password = request.form.get("password")
-    re_password = request.form.get("re-password")
+    raw_password = request.form.get("password")
+    raw_re_password = request.form.get("re-password")
     email = request.form.get("email")
-    if password != re_password or not email or not password:
+    if raw_password != raw_re_password or not email or not raw_password:
         abort(400)
 
-    new_user = User(email, password)
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        abort(400)
+
+    hashed_password = bcrypt.generate_password_hash(raw_password, 12).decode()
+    new_user = User(email, hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    return redirect("/account")
+    return redirect("/login")
 
 
 # TODO: Integrate with database
@@ -80,4 +119,13 @@ def get_edit_page(listing_id: int):
 
 @app.get("/account")
 def get_account_page():
-    return render_template("account.html")
+    if "email" not in session:
+        abort(401)
+    # the email is gonna get replaced by the user's first and last name
+    return render_template("account.html", email=session["email"])
+
+
+@app.post("/logout")
+def logout():
+    del session["email"]
+    return redirect("/")
