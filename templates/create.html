@@ -12,11 +12,27 @@
 <div class="container">
     <form class="border border-dark border-2 bg-light w-50 mx-auto p-3">
         <p class="p-2 h6 font-weight-bold">Computer Details</p>
+
         <div class="row p-2">
+            <div class="col">
+                <label for="price" class="form-label">Price</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control border border-dark" aria-label="Dollar amount (with dot and two decimal places)" id="price"  required>    
+                </div>
+            </div>
             <div class="col">
                 <label for="computer_case" class="form-label">Case</label>
                 <input type="text" class="form-control border border-dark" id="computer_case" required>
             </div>
+            <div class="col">
+                <label for="motherboard" class="form-label">Motherboard</label>
+                <input type="text" class="form-control border border-dark" id="motherboard" required>
+            </div>
+            
+        </div>
+
+        <div class="row p-2">
             <div class="col">
                 <label for="cpu" class="form-label">CPU</label>
                 <input type="text" class="form-control border border-dark" id="cpu" required>
@@ -25,12 +41,13 @@
                 <label for="gpu" class="form-label">GPU</label>
                 <input type="text" class="form-control border border-dark" id="gpu" required>
             </div>
-        </div>
-        <div class="row p-2">
             <div class="col">
                 <label for="ram" class="form-label">RAM</label>
                 <input type="text" class="form-control border border-dark" id="ram" required>
             </div>
+        </div>
+
+        <div class="row p-2">
             <div class="col">
                 <label for="memory" class="form-label">Memory</label>
                 <input type="text" class="form-control border border-dark" id="memory" required>
@@ -39,15 +56,17 @@
                 <label for="fans" class="form-label">Fans</label>
                 <input type="text" class="form-control border border-dark" id="fans" required>
             </div>
-        </div>
-        <div class="row p-2">
             <div class="col">
                 <label for="power_supply" class="form-label">Power Supply</label>
                 <input type="text" class="form-control border border-dark" id="power_supply" required>
             </div>
+
+        </div>
+
+        <div class="row p-2">
             <div class="col">
                 <label for="condition" class="form-label">Condition</label>
-                <select class="form-select" aria-label="condition" required>
+                <select class="form-select w-75" aria-label="condition" required>
                     <option selected disabled>Choose a wear</option>
                     <option value="1">Factory New</option>
                     <option value="2">Minimal Wear</option>
