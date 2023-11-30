@@ -114,7 +114,58 @@ def get_view_of_listing(listing_id: int):
 @app.get("/edit/<int:listing_id>")
 def get_edit_page(listing_id: int):
     # use listing_id to index through the dictionary "db" to get the PC Title then pass that instead of the listing_id
-    return render_template("edit.html", listing_id=listing_id)
+    computa = Computer.query.filter_by(computer_id=listing_id).first()
+    return render_template(
+        "edit.html",
+        listing_id=listing_id,
+        current_price=computa.price,
+        current_case=computa.case,
+        current_motherboard=computa.motherboard,
+        current_cpu=computa.cpu,
+        current_gpu=computa.gpu,
+        current_ram=computa.ram,
+        current_memory=computa.memory,
+        current_fans=computa.fans,
+        current_power_supply=computa.power_supply,
+        current_condition=computa.condition,
+        current_rgb=computa.rgb,
+        current_comments=computa.description
+    )
+
+@app.post("/edit/<int:listing_id>")
+def update_listing(listing_id: int):
+    computa = Computer.query.filter_by(computer_id=listing_id).first()
+
+    updated_price = request.form.get("price")
+    updated_case = request.form.get("computer_case")
+    updated_motherboard = request.form.get("motherboard")
+    updated_cpu = request.form.get("cpu")
+    updated_gpu = request.form.get("gpu")
+    updated_ram = request.form.get("ram")
+    updated_memory = request.form.get("memory")
+    updated_fans = request.form.get("fans")
+    updated_power_supply = request.form.get("power_supply")
+    updated_condition = request.form.get("condition")
+    updated_rgb = request.form.get("rgb")
+    updated_comments = request.form.get("comments")
+    
+    computa.price = updated_price
+    computa.case = updated_case
+    computa.motherboard = updated_motherboard
+    computa.cpu = updated_cpu
+    computa.gpu = updated_gpu
+    computa.ram = updated_ram
+    computa.memory = updated_memory
+    computa.fans = updated_fans
+    computa.power_supply = updated_power_supply
+    computa.condition = updated_condition
+    computa.rgb = updated_rgb
+    computa.comments = updated_comments
+    
+    db.session.commit()
+
+    return redirect(f"/view/{listing_id}")
+
 
 
 @app.get("/account")
