@@ -5,7 +5,26 @@
 
 <div class="container">
     <div class="row">
-        <p>No data right now cause we need to integrate this page with the DB</p>
+        <div class="container">
+            <div class="row">
+                {% for computer in Computa %}
+                <div class="col-sm m-2">
+                    <div class="card" style="width: 18rem; border: none;">
+                        <img class="card-img-top" src="" alt="pc image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ computer.case }}</h5>
+                            <ul>
+                                <li>{{ computer.cpu }}</li>
+                                <li>{{ computer.ram }}</li>
+                                <li>{{ computer.gpu }}</li>
+                            </ul>
+                            <a href = "/view/{{ computer.computer_id }}" class="btn btn-primary py-2 px-3 w-100 opacity-75">View</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 
