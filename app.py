@@ -107,14 +107,8 @@ def process_signup_request():
 # TODO: Integrate with database
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
-    # pc_name = f"PC {listing_id}"
-    # if pc_name not in db:
-    #     abort(404)
-
-    # pc_specs = db[pc_name]
-    # pc_image = pc_specs[-1]  # image URL is the last element in the list
-    # return render_template("iso-view.html", pc_name=pc_name, pc_specs=pc_specs, pc_image=pc_image)
-    return render_template("iso-view.html")
+    Computa = Computer.query.filter_by(computer_id = listing_id).first()
+    return render_template("iso-view.html", Computa = Computa)
 
 
 @app.get("/edit/<int:listing_id>")
