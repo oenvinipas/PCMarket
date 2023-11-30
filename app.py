@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template, session
-from models import User, db
+from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
 
 load_dotenv()
@@ -39,7 +39,9 @@ def inject_data():
 
 @app.get("/")
 def get_all_listings_page():
-    return render_template("index.html", db=db)
+    #Add the logic to create card view of each computer that was posted (Home Page)
+    Computa = Computer.query.all()
+    return render_template("index.html", Computa = Computa)
 
 
 @app.get("/create")
