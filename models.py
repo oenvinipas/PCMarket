@@ -23,8 +23,8 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     computer_id = db.Column(db.Integer, db.ForeignKey("computers.computer_id"), nullable=False)
     
-    user = db.relationship("User", backref="posts", lazy=True)
-    computer = db.relationship("Computer", backref="posts", lazy=True)
+    # user = db.relationship("User", backref="posts", lazy=True)
+    # computer = db.relationship("Computer", backref="posts", lazy=True)
     
     def __init__(self, user_id: int, computer_id: int) -> None:
         self.user_id = user_id
@@ -71,8 +71,8 @@ class Comments(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("posts.post_id"), nullable=False)
     comment = db.Column(db.String(255), nullable=False)
     
-    post = db.relationship("Posts", backref="comments", lazy=True)
-    user = db.relationship("User", backref="comments", lazy=True)
+    # post = db.relationship("Posts", backref="comments", lazy=True)
+    # user = db.relationship("User", backref="comments", lazy=True)
     
     def __init__(self, user_id: int, post_id: int, comment: str) -> None:
         self.user_id = user_id
