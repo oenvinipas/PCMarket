@@ -48,6 +48,29 @@ def get_all_listings_page():
 def get_create_listing_page():
     return render_template("create.html")
 
+@app.post("/create")
+def process_create_listing():
+    description = request.form.get("description")
+    price = request.form.get("price")
+    case = request.form.get("computer_case")
+    motherboard = request.form.get("motherboard")
+    cpu = request.form.get("cpu")
+    gpu = request.form.get("gpu")
+    ram = request.form.get("ram")
+    memory = request.form.get("memory")
+    fans = request.form.get("fans")
+    power_supply = request.form.get("power_supply")
+    condition = request.form.get("condition")
+    rgb = request.form.get("rgb")
+    
+    if not price:
+        abort(400)
+        
+    new_computer = Computer(description, price, case, motherboard, cpu, gpu, ram, memory, fans, power_supply, condition, rgb)
+    db.session.add(new_computer)
+    db.session.commit()
+    return redirect("/")
+
 
 @app.get("/login")
 def get_account_login_page():
