@@ -34,7 +34,11 @@ bcrypt.init_app(app)
 @app.context_processor
 def inject_data():
     session_first_name = session.get("first_name", "Guest")
-    return {"session_first_name": session_first_name}
+    session_user_id = session.get("user_id", 0)
+    return {
+        "session_first_name": session_first_name,
+        "session_user_id": session_user_id,
+    }
 
 
 @app.get("/")
@@ -166,13 +170,19 @@ def process_signup_request():
 
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
+    post = Posts.query.get_or_404(listing_id)
     Computa = Computer.query.filter_by(computer_id=listing_id).first()
-    return render_template("iso-view.html", Computa=Computa)
+    return render_template(
+        "iso-view.html",
+        Computa=Computa,
+        post=post,
+    )
 
 
 @app.get("/edit/<int:listing_id>")
 def get_edit_page(listing_id: int):
-    # post_id and computer_id need to be the same number or else post is None
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
     post = Posts.query.get_or_404(listing_id)
     if "user_id" not in session or session["user_id"] != post.user_id:
         abort(401)
@@ -181,7 +191,6 @@ def get_edit_page(listing_id: int):
     return render_template(
         "edit.html",
         listing_id=listing_id,
-        post=post,
         current_price=computa.price,
         current_case=computa.case,
         current_motherboard=computa.motherboard,
@@ -196,12 +205,14 @@ def get_edit_page(listing_id: int):
         current_comments=computa.description,
     )
 
+
 @app.post("/edit/<int:listing_id>")
 def update_listing(listing_id: int):
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
     post = Posts.query.get_or_404(listing_id)
     if "user_id" not in session or session["user_id"] != post.user_id:
         abort(401)
-        
+
     computa = Computer.query.filter_by(computer_id=listing_id).first()
 
     updated_price = request.form.get("price")
