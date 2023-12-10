@@ -12,7 +12,6 @@
 <div class="container">
     <form class="border border-dark border-2 bg-light w-50 mx-auto p-3" method="POST">
         <p class="p-2 h6 font-weight-bold">Computer Details</p>
-
         <div class="row p-2">
             <div class="col">
                 <label for="price" class="form-label">Price</label>
@@ -22,51 +21,54 @@
                 </div>
             </div>
             <div class="col">
-                <label for="computer_case" class="form-label">Case</label>
-                <input type="text" class="form-control border border-dark" id="computer_case" name="computer_case" required>
+                <span for="name" class="form-label">Computer Name</span>
+                <input type="text" class="form-control border border-dark mt-2" id="name" name="name" required>
             </div>
             <div class="col">
-                <label for="motherboard" class="form-label">Motherboard</label>
-                <input type="text" class="form-control border border-dark" id="motherboard" name="motherboard" required>
+                <label for="computer_case" class="form-label">Case</label>
+                <input type="text" class="form-control border border-dark" id="computer_case" name="computer_case">
             </div>
-            
         </div>
 
         <div class="row p-2">
             <div class="col">
+                <label for="motherboard" class="form-label">Motherboard</label>
+                <input type="text" class="form-control border border-dark" id="motherboard" name="motherboard">
+            </div>
+            <div class="col">
                 <label for="cpu" class="form-label">CPU</label>
-                <input type="text" class="form-control border border-dark" id="cpu" name="cpu" required>
+                <input type="text" class="form-control border border-dark" id="cpu" name="cpu">
             </div>
             <div class="col">
                 <label for="gpu" class="form-label">GPU</label>
-                <input type="text" class="form-control border border-dark" id="gpu" name="gpu" required>
-            </div>
-            <div class="col">
-                <label for="ram" class="form-label">RAM</label>
-                <input type="text" class="form-control border border-dark" id="ram" name="ram" required>
+                <input type="text" class="form-control border border-dark" id="gpu" name="gpu">
             </div>
         </div>
 
         <div class="row p-2">
             <div class="col">
-                <label for="memory" class="form-label">Memory</label>
-                <input type="text" class="form-control border border-dark" id="memory" name="memory" required>
+                <label for="ram" class="form-label">RAM</label>
+                <input type="text" class="form-control border border-dark" id="ram" name="ram">
             </div>
             <div class="col">
-                <label for="fans" class="form-label">Fans</label>
-                <input type="text" class="form-control border border-dark" id="fans" name="fans" required>
+                <label for="memory" class="form-label">Memory</label>
+                <input type="text" class="form-control border border-dark" id="memory" name="memory">
             </div>
             <div class="col">
                 <label for="power_supply" class="form-label">Power Supply</label>
-                <input type="text" class="form-control border border-dark" id="power_supply" name="power_supply" required>
+                <input type="text" class="form-control border border-dark" id="power_supply" name="power_supply">
             </div>
 
         </div>
 
         <div class="row p-2">
             <div class="col">
+                <label for="fans" class="form-label">Fans</label>
+                <input type="text" class="form-control border border-dark" id="fans" name="fans">
+            </div>
+            <div class="col">
                 <label for="condition" class="form-label">Condition</label>
-                <select class="form-select w-75" aria-label="condition" name="condition" id="condition" required>
+                <select class="form-select" aria-label="condition" name="condition" id="condition">
                     <option selected disabled>Choose a wear</option>
                     <option value="Factory New">Factory New</option>
                     <option value="Minimal Wear">Minimal Wear</option>
@@ -77,13 +79,23 @@
             </div>
             <div class="col">
                 <div class="mt-3 p-3">
-                    <input class="form-check-input border border-dark" type="checkbox" value="" id="rgb" name="rgb" default="false">
+                    <input class="form-check-input border border-dark" type="checkbox" value="True" id="rgb" name="rgb">
                     <label class="form-check-label" for="rgb">
                       RGB
                     </label>
                 </div>
             </div>
         </div>
+
+        <div class="row p-2">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Image</label>
+                    <input class="form-control" type="file" id="formFile" name="image">
+                </div>
+            </div>
+        </div>
+
         <div class="row p-2">
             <div class="col">
                 <label for="description" class="form-label">Description</label>

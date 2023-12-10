@@ -71,7 +71,7 @@
         </div>
         <div class="col">
             <div class="mt-3 p-3">
-                <input class="form-check-input border border-dark" type="checkbox" name ="rgb" value="{{ current_rgb }}" id="rgb">
+                <input class="form-check-input border border-dark" type="checkbox" name ="rgb" value="True" id="rgb" {% if current_rgb %}checked{% endif %}>
                 <label class="form-check-label" for="rgb">
                   RGB
                 </label>

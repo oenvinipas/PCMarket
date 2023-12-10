@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, abort, request, redirect, render_template, session
+from flask import Flask, abort, request, redirect, render_template, session, flash
 from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
 
@@ -51,6 +51,7 @@ def get_create_listing_page():
 @app.post("/create")
 def process_create_listing():
     description = request.form.get("description")
+    name = request.form.get("name")
     price = request.form.get("price")
     case = request.form.get("computer_case")
     motherboard = request.form.get("motherboard")
@@ -61,12 +62,14 @@ def process_create_listing():
     fans = request.form.get("fans")
     power_supply = request.form.get("power_supply")
     condition = request.form.get("condition")
-    rgb = request.form.get("rgb")
+    rgb = request.form.get("rgb") == "True"
     
-    if not price:
+    parts = (case and motherboard and cpu and gpu and ram and memory and fans and power_supply and condition)
+    
+    if not price or not parts:
         abort(400)
-        
-    new_computer = Computer(description, price, case, motherboard, cpu, gpu, ram, memory, fans, power_supply, condition, rgb)
+
+    new_computer = Computer(name, description, price, case, motherboard, cpu, gpu, ram, memory, fans, power_supply, condition, rgb)        
     db.session.add(new_computer)
     db.session.commit()
     return redirect("/")
@@ -169,7 +172,7 @@ def update_listing(listing_id: int):
     updated_fans = request.form.get("fans")
     updated_power_supply = request.form.get("power_supply")
     updated_condition = request.form.get("condition")
-    updated_rgb = request.form.get("rgb")
+    updated_rgb = request.form.get("rgb") == "True"
     updated_comments = request.form.get("comments")
     
     computa.price = updated_price
