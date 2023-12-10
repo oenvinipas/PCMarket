@@ -49,6 +49,7 @@ class Computer(db.Model):
         self.power_supply = power_supply
         self.condition = condition
         self.rgb = rgb
+        #hi
         
 class Posts(db.Model):
     __tablename__ = "posts"

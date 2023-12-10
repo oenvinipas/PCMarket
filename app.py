@@ -64,7 +64,7 @@ def process_create_listing():
     condition = request.form.get("condition")
     rgb = request.form.get("rgb") == "True"
     
-    parts = (case and motherboard and cpu and gpu and ram and memory and fans and power_supply and condition)
+    parts = (case and motherboard and cpu and gpu and ram and memory and fans and power_supply and condition) # hi 
     
     if not price or not parts:
         abort(400)
