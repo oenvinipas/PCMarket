@@ -1,6 +1,6 @@
 CREATE DATABASE pcmarket;
 
-CREATE TABLE users
+create table users
 (
     user_id serial primary key,
     email varchar(255) not null unique,
@@ -9,12 +9,15 @@ CREATE TABLE users
     last_name varchar(255)
 );
 
-CREATE TABLE computer
+create table computer
 (
     computer_id serial primary key,
+    name varchar(255) default 'computer',
     description varchar(255) default '-',
     image varchar(255),
+    price varchar(255) not null,
     "case" varchar(255) default '-',
+    motherboard varchar(255) default '-',
     cpu varchar(255) default '-',
     gpu varchar(255) default '-',
     ram varchar(255) default '-',
@@ -25,17 +28,17 @@ CREATE TABLE computer
     rgb bool default false
 );
 
-CREATE TABLE posts
+create table posts
 (
     post_id serial primary key,
     user_id integer references users(user_id),
     computer_id integer references computer(computer_id)
 );
 
-CREATE TABLE comments
+create table comments
 (
-    comment_id serial,
+    comment_id serial primary key ,
     post_id integer references posts(post_id),
     user_id integer references users(user_id),
-    primary key (comment_id)
+    comment varchar(255)
 );
