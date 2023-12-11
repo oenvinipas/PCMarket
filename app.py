@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template, session, flash
 from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
+from datetime import timedelta
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ app.config[
 ] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
 
 app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
+app.permanent_session_lifetime = timedelta(minutes=1)
 
 db.init_app(app)
 bcrypt = Bcrypt()
@@ -45,6 +47,9 @@ def inject_data():
 def get_all_listings_page():
     # Add the logic to create card view of each computer that was posted (Home Page)
     Computa = Computer.query.all()
+    # print("email", session["email"])
+    # print("first_name", session["first_name"])
+    # print("user_id", session["user_id"])
     return render_template("index.html", Computa=Computa)
 
 
