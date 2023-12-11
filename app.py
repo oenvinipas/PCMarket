@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, abort, request, redirect, render_template, session, flash
+from flask import Flask, abort, request, redirect, render_template, session, flash, make_response
 from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
 
@@ -79,7 +79,7 @@ def process_create_listing():
         and fans
         and power_supply
         and condition
-    )  # hi
+    )  
 
     if not price or not parts:
         abort(400)
@@ -191,6 +191,7 @@ def get_edit_page(listing_id: int):
     return render_template(
         "edit.html",
         listing_id=listing_id,
+        current_name=computa.name,
         current_price=computa.price,
         current_case=computa.case,
         current_motherboard=computa.motherboard,
@@ -216,6 +217,7 @@ def update_listing(listing_id: int):
     computa = Computer.query.filter_by(computer_id=listing_id).first()
 
     updated_price = request.form.get("price")
+    updated_name = request.form.get("name")
     updated_case = request.form.get("computer_case")
     updated_motherboard = request.form.get("motherboard")
     updated_cpu = request.form.get("cpu")
@@ -229,6 +231,7 @@ def update_listing(listing_id: int):
     updated_comments = request.form.get("comments")
 
     computa.price = updated_price
+    computa.name = updated_name
     computa.case = updated_case
     computa.motherboard = updated_motherboard
     computa.cpu = updated_cpu
@@ -245,6 +248,33 @@ def update_listing(listing_id: int):
 
     return redirect(f"/view/{listing_id}")
 
+@app.post("/view/<int:listing_id>")
+def process_bid(listing_id: int):
+    post = Posts.query.get_or_404(listing_id)
+    
+    # make sure user is logged in
+    if "email" not in session:
+        flash("You must be logged in to bid", "danger")
+        return redirect(f"/view/{listing_id}")
+
+    
+    bid_amt = request.form.get("bid")
+    if not bid_amt:
+        flash("Invalid Bid", "danger")
+        return redirect(f"/view/{listing_id}")
+        
+    bid_amt = float(bid_amt)
+    if bid_amt <= 0:
+        abort(400)
+        
+    if bid_amt <= float(post.computer.price):
+        flash("Bid must be higher than current price", "danger")
+    else:
+        post.computer.price = bid_amt
+        db.session.commit()
+        flash("Bid successful!", "success")
+    
+    return redirect(f"/view/{listing_id}")
 
 @app.get("/account")
 def get_account_page():

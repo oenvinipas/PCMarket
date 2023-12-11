@@ -11,7 +11,7 @@
 </div>
 <div class="container">
     <form class="border border-dark border-2 bg-light w-50 mx-auto p-3" action="/edit/{{ listing_id }}" method="POST">
-        <p class="p-2 h6 font-weight-bold">Computer Details</p>
+        <p class="p-2 h6 font-weight-bold">Edit Computer Details</p>
         <div class="row p-2">
             <div class="col">
                 <label for="price" class="form-label">Price</label>
@@ -21,15 +21,19 @@
                 </div>
             </div>
             <div class="col">
+                <span for="name" class="form-label">Computer Name</span>
+                <input type="text" class="form-control border border-dark mt-2" id="name" name="name" value = "{{ current_name }}" required>
+            </div>
+            <div class="col">
                 <label for="computer_case" class="form-label">Case</label>
                 <input type="text" class="form-control border border-dark" id="computer_case" name ="computer_case" value="{{ current_case }}" required>
             </div>
+        </div>
+        <div class="row p-2">
             <div class="col">
                 <label for="motherboard" class="form-label">Motherboard</label>
                 <input type="text" class="form-control border border-dark" id="motherboard" name ="motherboard" value="{{ current_motherboard }}" required>
             </div>
-        </div>
-        <div class="row p-2">
             <div class="col">
                 <label for="cpu" class="form-label">CPU</label>
                 <input type="text" class="form-control border border-dark" id="cpu" name ="cpu" value="{{ current_cpu }}" required>
@@ -38,19 +42,15 @@
                 <label for="gpu" class="form-label">GPU</label>
                 <input type="text" class="form-control border border-dark" id="gpu" name ="gpu" value="{{ current_gpu }}" required>
             </div>
+        </div>
+        <div class="row p-2">
             <div class="col">
                 <label for="ram" class="form-label">RAM</label>
                 <input type="text" class="form-control border border-dark" id="ram" name ="ram" value="{{ current_ram }}" required>
             </div>
-        </div>
-        <div class="row p-2">
             <div class="col">
                 <label for="memory" class="form-label">Memory</label>
                 <input type="text" class="form-control border border-dark" id="memory" name ="memory" value="{{ current_memory }}" required>
-            </div>
-            <div class="col">
-                <label for="fans" class="form-label">Fans</label>
-                <input type="text" class="form-control border border-dark" id="fans" name ="fans" value="{{ current_fans }}" required>
             </div>
             <div class="col">
                 <label for="power_supply" class="form-label">Power Supply</label>
@@ -59,14 +59,17 @@
         </div>
         <div class="row p-2">
         <div class="col">
+            <label for="fans" class="form-label">Fans</label>
+            <input type="text" class="form-control border border-dark" id="fans" name ="fans" value="{{ current_fans }}" required>
+        </div>
+        <div class="col">
             <label for="condition" class="form-label">Condition</label>
-            <select class="form-select" aria-label="condition" required>
-                <option value="{{ current_condition }}">{{ current_condition }}</option>
-                <option value="1">Factory New</option>
-                <option value="2">Minimal Wear</option>
-                <option value="3">Field Tested</option>
-                <option value="4">Well Worn</option>
-                <option value="5">Battle Scarred</option>
+            <select class="form-select" aria-label="condition" name="condition" required>
+                <option value="1" {% if current_condition == '1' %}selected{% endif %}>Factory New</option>
+                <option value="2" {% if current_condition == '2' %}selected{% endif %}>Minimal Wear</option>
+                <option value="3" {% if current_condition == '3' %}selected{% endif %}>Field Tested</option>
+                <option value="4" {% if current_condition == '4' %}selected{% endif %}>Well Worn</option>
+                <option value="5" {% if current_condition == '5' %}selected{% endif %}>Battle Scarred</option>
             </select>
         </div>
         <div class="col">
@@ -77,7 +80,14 @@
                 </label>
             </div>
         </div>
-    </div>
+        <div class="row p-2">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Image</label>
+                    <input class="form-control" type="file" id="formFile" name="image"> <!-- Implement later -->
+                </div>
+            </div>
+        </div>
         <div class="row p-2">
             <div class="col">
                 <label for="comments" class="form-label">Description</label>

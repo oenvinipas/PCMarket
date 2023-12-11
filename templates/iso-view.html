@@ -42,9 +42,15 @@
           </div>
       </div>
     </div>
-    <div class="mx-auto px-2">
-      <button type="button" href="#" class="btn btn-success">Place Bid</a>
-    </div>
+    <form method="POST">
+      <div class="mx-auto px-2">
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="text" class="form-control border border-dark" aria-label="Dollar amount (with dot and two decimal places)" id="bid" name="bid">    
+      </div>
+        <button type="submit" href="#" class="btn btn-success">Place Bid</a> <!-- BID BUTTON-->
+      </div>
+    </form>
     </div>
     <!-- Edit/Delete Buttons -->
     {% if session_user_id == post.user_id %}
@@ -65,6 +71,15 @@
     </div>
   {% endif %}
 </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
     <tbody>
       <tr>
         <th scope="row">Case</th>
@@ -104,7 +119,7 @@
       </tr>
       <tr>
         <th scope="row">Price</th>
-        <td> {{ Computa.price }}</td>
+        <td> ${{ Computa.price }}</td>
       </tr>
       <tr>
         <th scope="row">Motherboard</th>
