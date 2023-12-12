@@ -264,3 +264,16 @@ def logout():
     del session["first_name"]
     del session["user_id"]
     return redirect("/")
+
+@app.post("/delete/<int:listing_id>")
+def delete_listing(listing_id: int):
+    post = Posts.query.get_or_404(listing_id)
+    if "user_id" not in session or session["user_id"] != post.user_id:
+        abort(401)
+
+    computa = Computer.query.filter_by(computer_id=listing_id).first()
+
+    db.session.delete(post)
+    db.session.delete(computa)
+    db.session.commit()
+    return redirect("/")
