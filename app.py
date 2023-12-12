@@ -178,10 +178,15 @@ def get_view_of_listing(listing_id: int):
     # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
     post = Posts.query.get_or_404(listing_id)
     Computa = Computer.query.filter_by(computer_id=listing_id).first()
+    comment_count = Comments.query.filter_by(post_id=listing_id).count()
+    # Add Bids DB and query for bids_count 
+    # bids_count = Bids.query.filter_by(post_id=listing_id).count()  
     return render_template(
         "iso-view.html",
         Computa=Computa,
         post=post,
+        comment_count=comment_count,
+        bids_count=0 # REPLACE WITH bids_count LATER
     )
 
 
@@ -274,6 +279,7 @@ def process_bid(listing_id: int):
         
     if bid_amt <= float(post.computer.price):
         flash("Bid must be higher than current price", "danger")
+        return redirect(f"/view/{listing_id}")
     else:
         post.computer.price = bid_amt
         db.session.commit()
