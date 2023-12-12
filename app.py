@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template, session, flash
 from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
+from datetime import timedelta
 
 load_dotenv()
 
@@ -13,40 +14,34 @@ app.config[
 ] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
 
 app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 db.init_app(app)
 bcrypt = Bcrypt()
 bcrypt.init_app(app)
 
-# db = {
-#     "PC 1": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 2": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 3": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 4": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 5": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 6": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 7": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 8": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-#     "PC 9": ["Ryzen 9 3900X", "GeForce RTX 4080", "32GB DDR4 3200mhz", "980 Pro 2TB Internal SSD PCIE Gen 4x4 MVME", "https://m.media-amazon.com/images/I/81X8UMFt+RL.jpg"],
-# }
-
 
 @app.context_processor
 def inject_data():
-    session_first_name = session.get('first_name', "Guest")
-    return {"session_first_name": session_first_name}
+    session_first_name = session.get("first_name", "Guest")
+    session_user_id = session.get("user_id", 0)
+    return {
+        "session_first_name": session_first_name,
+        "session_user_id": session_user_id,
+    }
 
 
 @app.get("/")
 def get_all_listings_page():
-    #Add the logic to create card view of each computer that was posted (Home Page)
+    # Add the logic to create card view of each computer that was posted (Home Page)
     Computa = Computer.query.all()
-    return render_template("index.html", Computa = Computa)
+    return render_template("index.html", Computa=Computa)
 
 
 @app.get("/create")
 def get_create_listing_page():
     return render_template("create.html")
+
 
 @app.post("/create")
 def process_create_listing():
@@ -63,14 +58,42 @@ def process_create_listing():
     power_supply = request.form.get("power_supply")
     condition = request.form.get("condition")
     rgb = request.form.get("rgb") == "True"
-    
-    parts = (case and motherboard and cpu and gpu and ram and memory and fans and power_supply and condition) # hi 
-    
+
+    parts = (
+        case
+        and motherboard
+        and cpu
+        and gpu
+        and ram
+        and memory
+        and fans
+        and power_supply
+        and condition
+    )  # hi
+
     if not price or not parts:
         abort(400)
 
-    new_computer = Computer(name, description, price, case, motherboard, cpu, gpu, ram, memory, fans, power_supply, condition, rgb)        
+    new_computer = Computer(
+        name,
+        description,
+        price,
+        case,
+        motherboard,
+        cpu,
+        gpu,
+        ram,
+        memory,
+        fans,
+        power_supply,
+        condition,
+        rgb,
+    )
     db.session.add(new_computer)
+    db.session.commit()
+
+    new_post = Posts(session["user_id"], new_computer.computer_id)
+    db.session.add(new_post)
     db.session.commit()
     return redirect("/")
 
@@ -87,19 +110,19 @@ def process_login_request():
     raw_password = request.form.get("password")
     email = request.form.get("email")
     if not raw_password or not email:
-        abort(401)
+        return redirect("/login")
 
     existing_user = User.query.filter_by(email=email).first()
     if not existing_user:
-        abort(401)
+        return redirect("/login")
 
     if not bcrypt.check_password_hash(existing_user.password, raw_password):
-        abort(401)
-    
+        return redirect("/login")
     # first_name = existing_user.first_name
 
     session["email"] = email
     session["first_name"] = existing_user.first_name
+    session["user_id"] = existing_user.user_id
     return redirect("/account")
 
 
@@ -116,7 +139,12 @@ def process_signup_request():
     raw_re_password = request.form.get("re-password")
     email = request.form.get("email")
     first_name = request.form.get("first_name")
-    if raw_password != raw_re_password or not email or not raw_password or not first_name:
+    if (
+        raw_password != raw_re_password
+        or not email
+        or not raw_password
+        or not first_name
+    ):
         abort(400)
 
     existing_user = User.query.filter_by(email=email).first()
@@ -130,16 +158,25 @@ def process_signup_request():
     return redirect("/login")
 
 
-# TODO: Integrate with database
 @app.get("/view/<int:listing_id>")
 def get_view_of_listing(listing_id: int):
-    Computa = Computer.query.filter_by(computer_id = listing_id).first()
-    return render_template("iso-view.html", Computa = Computa)
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
+    post = Posts.query.get_or_404(listing_id)
+    Computa = Computer.query.filter_by(computer_id=listing_id).first()
+    return render_template(
+        "iso-view.html",
+        Computa=Computa,
+        post=post,
+    )
 
 
 @app.get("/edit/<int:listing_id>")
 def get_edit_page(listing_id: int):
-    # use listing_id to index through the dictionary "db" to get the PC Title then pass that instead of the listing_id
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
+    post = Posts.query.get_or_404(listing_id)
+    if "user_id" not in session or session["user_id"] != post.user_id:
+        abort(401)
+
     computa = Computer.query.filter_by(computer_id=listing_id).first()
     return render_template(
         "edit.html",
@@ -155,11 +192,17 @@ def get_edit_page(listing_id: int):
         current_power_supply=computa.power_supply,
         current_condition=computa.condition,
         current_rgb=computa.rgb,
-        current_comments=computa.description
+        current_description=computa.description,
     )
+
 
 @app.post("/edit/<int:listing_id>")
 def update_listing(listing_id: int):
+    # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
+    post = Posts.query.get_or_404(listing_id)
+    if "user_id" not in session or session["user_id"] != post.user_id:
+        abort(401)
+
     computa = Computer.query.filter_by(computer_id=listing_id).first()
 
     updated_price = request.form.get("price")
@@ -173,8 +216,8 @@ def update_listing(listing_id: int):
     updated_power_supply = request.form.get("power_supply")
     updated_condition = request.form.get("condition")
     updated_rgb = request.form.get("rgb") == "True"
-    updated_comments = request.form.get("comments")
-    
+    updated_description = request.form.get("description")
+
     computa.price = updated_price
     computa.case = updated_case
     computa.motherboard = updated_motherboard
@@ -186,12 +229,11 @@ def update_listing(listing_id: int):
     computa.power_supply = updated_power_supply
     computa.condition = updated_condition
     computa.rgb = updated_rgb
-    computa.comments = updated_comments
-    
+    computa.description = updated_description
+
     db.session.commit()
 
     return redirect(f"/view/{listing_id}")
-
 
 
 @app.get("/account")
@@ -205,4 +247,18 @@ def get_account_page():
 def logout():
     del session["email"]
     del session["first_name"]
+    del session["user_id"]
+    return redirect("/")
+
+@app.post("/delete/<int:listing_id>")
+def delete_listing(listing_id: int):
+    post = Posts.query.get_or_404(listing_id)
+    if "user_id" not in session or session["user_id"] != post.user_id:
+        abort(401)
+
+    computa = Computer.query.filter_by(computer_id=listing_id).first()
+
+    db.session.delete(post)
+    db.session.delete(computa)
+    db.session.commit()
     return redirect("/")

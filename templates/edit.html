@@ -60,14 +60,14 @@
         <div class="row p-2">
         <div class="col">
             <label for="condition" class="form-label">Condition</label>
-            <select class="form-select" aria-label="condition" required>
+            <select class="form-select" aria-label="condition" name="condition" required>
                 <option value="{{ current_condition }}">{{ current_condition }}</option>
-                <option value="1">Factory New</option>
-                <option value="2">Minimal Wear</option>
-                <option value="3">Field Tested</option>
-                <option value="4">Well Worn</option>
-                <option value="5">Battle Scarred</option>
-            </select>
+                <option value="Factory New">Factory New</option>
+                <option value="Minimal Wear">Minimal Wear</option>
+                <option value="Field Tested">Field Tested</option>
+                <option value="Well Worn">Well Worn</option>
+                <option value="Battle Scarred">Battle Scarred</option>
+            </select>   
         </div>
         <div class="col">
             <div class="mt-3 p-3">
@@ -80,8 +80,8 @@
     </div>
         <div class="row p-2">
             <div class="col">
-                <label for="comments" class="form-label">Description</label>
-                <textarea type="text" class="form-control border border-dark" id="comments" name ="comments" rows="4" value="{{ current_comments }}"></textarea>
+                <label for="description" class="form-label">Description</label>
+                <textarea type="text" class="form-control border border-dark" id="description" name="description" rows="4" required>{{ current_description }}</textarea>
             </div>
         </div>
         <div class="row">
