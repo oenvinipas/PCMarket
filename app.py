@@ -14,7 +14,7 @@ app.config[
 ] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
 
 app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
-app.permanent_session_lifetime = timedelta(minutes=1)
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 db.init_app(app)
 bcrypt = Bcrypt()
@@ -125,14 +125,14 @@ def process_login_request():
     raw_password = request.form.get("password")
     email = request.form.get("email")
     if not raw_password or not email:
-        abort(401)
+        return redirect("/login")
 
     existing_user = User.query.filter_by(email=email).first()
     if not existing_user:
-        abort(401)
+        return redirect("/login")
 
     if not bcrypt.check_password_hash(existing_user.password, raw_password):
-        abort(401)
+        return redirect("/login")
     # first_name = existing_user.first_name
 
     session["email"] = email
