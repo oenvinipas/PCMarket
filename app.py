@@ -125,14 +125,14 @@ def process_login_request():
     raw_password = request.form.get("password")
     email = request.form.get("email")
     if not raw_password or not email:
-        abort(401)
+        return redirect("/login")
 
     existing_user = User.query.filter_by(email=email).first()
     if not existing_user:
-        abort(401)
+        return redirect("/login")
 
     if not bcrypt.check_password_hash(existing_user.password, raw_password):
-        abort(401)
+        return redirect("/login")
     # first_name = existing_user.first_name
 
     session["email"] = email
@@ -299,4 +299,17 @@ def logout():
     del session["email"]
     del session["first_name"]
     del session["user_id"]
+    return redirect("/")
+
+@app.post("/delete/<int:listing_id>")
+def delete_listing(listing_id: int):
+    post = Posts.query.get_or_404(listing_id)
+    if "user_id" not in session or session["user_id"] != post.user_id:
+        abort(401)
+
+    computa = Computer.query.filter_by(computer_id=listing_id).first()
+
+    db.session.delete(post)
+    db.session.delete(computa)
+    db.session.commit()
     return redirect("/")
