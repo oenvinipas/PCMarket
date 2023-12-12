@@ -207,7 +207,7 @@ def get_edit_page(listing_id: int):
         current_power_supply=computa.power_supply,
         current_condition=computa.condition,
         current_rgb=computa.rgb,
-        current_comments=computa.description,
+        current_description=computa.description,
     )
 
 
@@ -231,7 +231,7 @@ def update_listing(listing_id: int):
     updated_power_supply = request.form.get("power_supply")
     updated_condition = request.form.get("condition")
     updated_rgb = request.form.get("rgb") == "True"
-    updated_comments = request.form.get("comments")
+    updated_description = request.form.get("description")
 
     computa.price = updated_price
     computa.case = updated_case
@@ -244,7 +244,7 @@ def update_listing(listing_id: int):
     computa.power_supply = updated_power_supply
     computa.condition = updated_condition
     computa.rgb = updated_rgb
-    computa.comments = updated_comments
+    computa.description = updated_description
 
     db.session.commit()
 
