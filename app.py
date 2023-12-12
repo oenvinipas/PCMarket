@@ -14,7 +14,7 @@ app.config[
 ] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
 
 app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
-app.permanent_session_lifetime = timedelta(minutes=30)
+app.permanent_session_lifetime = timedelta(minutes=1)
 
 db.init_app(app)
 bcrypt = Bcrypt()
