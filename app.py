@@ -248,10 +248,11 @@ def update_listing(listing_id: int):
 
 
 @app.get("/account")
-def get_account_page():
-    if "email" not in session:
-        abort(401)
-    return render_template("account.html")
+def get_account_page(): 
+    if session.get('first_name') == None:
+        return redirect('/login')
+    else:
+        return render_template("account.html")
 
 
 @app.post("/logout")
