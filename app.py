@@ -42,78 +42,71 @@ def get_all_listings_page():
 def get_create_listing_page():
     return render_template("create.html")
 
-
 @app.post("/create")
 def process_create_listing():
-    if request.method == 'POST':
-        file = request.files['image']
-        upload_url = 'https://api.imgbb.com/1/upload'
-        with file.stream as f:
-            payload = {
-                'key': imgBBapi_key,
-                'image': f.read()
-            }
-            response = requests.post(upload_url, payload)
-        if response.status_code == 200:
-            #store image url into the db
-            image_url = response.json()['data']['url']
-            return render_template('result.html', image_url=image_url)
-        else:
-            error_message = response.text
-            return render_template('error.html', error=error_message)
-    
-    description = request.form.get("description")
-    name = request.form.get("name")
-    price = request.form.get("price")
-    case = request.form.get("computer_case")
-    motherboard = request.form.get("motherboard")
-    cpu = request.form.get("cpu")
-    gpu = request.form.get("gpu")
-    ram = request.form.get("ram")
-    memory = request.form.get("memory")
-    fans = request.form.get("fans")
-    power_supply = request.form.get("power_supply")
-    condition = request.form.get("condition")
-    rgb = request.form.get("rgb") == "True"
-
-    parts = (
-        case
-        and motherboard
-        and cpu
-        and gpu
-        and ram
-        and memory
-        and fans
-        and power_supply
-        and condition
-    )  # hi
-
-    if not price or not parts:
+    if "image" not in request.files:
+        flash("No image provided", "error")
         abort(400)
 
-    new_computer = Computer(
-        name,
-        description,
-        price,
-        case,
-        motherboard,
-        cpu,
-        gpu,
-        ram,
-        memory,
-        fans,
-        power_supply,
-        condition,
-        rgb,
-    )
-    db.session.add(new_computer)
-    db.session.commit()
+    file = request.files["image"]
 
-    new_post = Posts(session["user_id"], new_computer.computer_id)
-    db.session.add(new_post)
-    db.session.commit()
-    return redirect("/")
+    if file.filename == "":
+        flash("No selected file", "error")
+        abort(400)
 
+    imgbb_url = "https://api.imgbb.com/1/upload"
+    files = {"image": (file.filename, file.read())}
+    params = {"key": imgBBapi_key}
+
+    response = requests.post(imgbb_url, files=files, params=params)
+
+    if response.status_code == 200:
+        image_url = response.json()["data"]["url"]
+
+        # Get other form data
+        description = request.form.get("description")
+        name = request.form.get("name")
+        price = request.form.get("price")
+        case = request.form.get("computer_case")
+        motherboard = request.form.get("motherboard")
+        cpu = request.form.get("cpu")
+        gpu = request.form.get("gpu")
+        ram = request.form.get("ram")
+        memory = request.form.get("memory")
+        fans = request.form.get("fans")
+        power_supply = request.form.get("power_supply")
+        condition = request.form.get("condition")
+        rgb = request.form.get("rgb") == "True"
+
+        new_computer = Computer(
+            name,
+            description,
+            image_url,
+            price,
+            case,
+            motherboard,
+            cpu,
+            gpu,
+            ram,
+            memory,
+            fans,
+            power_supply,
+            condition,
+            rgb,
+        )
+
+        db.session.add(new_computer)
+        db.session.commit()
+        new_post = Posts(session["user_id"], new_computer.computer_id)
+        db.session.add(new_post)
+        db.session.commit()
+
+        return redirect("/")
+    else:
+        error_message = response.text
+        flash(f"Image upload failed: {error_message}", "error")
+        # return render_template("error.html", error=error_message)
+        return redirect("/create")
 
 @app.get("/login")
 def get_account_login_page():
@@ -179,7 +172,8 @@ def process_signup_request():
 def get_view_of_listing(listing_id: int):
     # post_id and computer_id (listing_id in this case) need to be the same number or else post is None
     post = Posts.query.get_or_404(listing_id)
-    Computa = Computer.query.filter_by(computer_id=listing_id).first()
+    listing_computer_id = post.computer_id
+    Computa = Computer.query.filter_by(computer_id=listing_computer_id).first()
     return render_template(
         "iso-view.html",
         Computa=Computa,
