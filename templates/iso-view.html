@@ -47,8 +47,8 @@
       <div class="mx-auto px-2">
         <div class="input-group w-75 mt-2">
             <span class="input-group-text">$</span>
-            <input type="text" class="form-control border border-dark" aria-label="Dollar amount (with dot and two decimal places)" id="bid" name="bid">    
-            <button type="submit" href="#" class="btn btn-success">Place Bid</button>
+            <input type="text" class="form-control border border-dark" aria-label="Dollar amount (with dot and two decimal places)" id="bid" name="bid" {% if winner %} disabled {% endif %}>    
+            <button type="submit" href="#" class="btn btn-success" {% if winner %} disabled {% endif %}>Place Bid</button>
           </div>
       </div>
     </form>

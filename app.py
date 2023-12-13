@@ -185,6 +185,7 @@ def get_view_of_listing(listing_id: int):
                 post=post,
                 comment_count=comment_count,
                 time_remaining="Auction Ended",
+                winner=True,
             )
         else: 
             return render_template(
@@ -193,6 +194,7 @@ def get_view_of_listing(listing_id: int):
                 post=post,
                 comment_count=comment_count,
                 time_remaining="Auction Ended",
+                winner=True,
             )
     
     if days > 0:
@@ -209,6 +211,7 @@ def get_view_of_listing(listing_id: int):
         post=post,
         comment_count=comment_count,
         time_remaining=time_remaining,
+        winner=False,
     )
 
 
