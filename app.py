@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template, session, flash, make_response
 from models import db, User, Computer, Posts, Comments
 from flask_bcrypt import Bcrypt
-from datetime import timedelta
+from datetime import timedelta, datetime 
 
 load_dotenv()
 
@@ -58,6 +58,8 @@ def process_create_listing():
     power_supply = request.form.get("power_supply")
     condition = request.form.get("condition")
     rgb = request.form.get("rgb") == "True"
+    
+    bid_days = request.form.get("bid_days")
 
     parts = (
         case
@@ -92,7 +94,7 @@ def process_create_listing():
     db.session.add(new_computer)
     db.session.commit()
 
-    new_post = Posts(session["user_id"], new_computer.computer_id)
+    new_post = Posts(session["user_id"], new_computer.computer_id, bid_days=bid_days)
     db.session.add(new_post)
     db.session.commit()
     return redirect("/")
@@ -164,14 +166,24 @@ def get_view_of_listing(listing_id: int):
     post = Posts.query.get_or_404(listing_id)
     Computa = Computer.query.filter_by(computer_id=listing_id).first()
     comment_count = Comments.query.filter_by(post_id=listing_id).count()
-    # Add Bids DB and query for bids_count 
-    # bids_count = Bids.query.filter_by(post_id=listing_id).count()  
+
+    # Calculate the end time
+    end_time = datetime.now() + timedelta(days=post.bid_days)
+
+    # Calculate the remaining time
+    current_time = end_time - datetime.now()
+
+    days, remainder = divmod(current_time.total_seconds(), 24 * 60 * 60)
+    hours = remainder // 3600
+
+    time_remaining = f"{int(days)} days, {int(hours)} hours"
+      
     return render_template(
         "iso-view.html",
         Computa=Computa,
         post=post,
         comment_count=comment_count,
-        bids_count=0 # REPLACE WITH bids_count LATER
+        time_remaining=time_remaining,
     )
 
 
@@ -267,6 +279,8 @@ def process_bid(listing_id: int):
         return redirect(f"/view/{listing_id}")
     else:
         post.computer.price = bid_amt
+        post.bid_count += 1
+        post.top_bidder = session["user_id"]
         db.session.commit()
         flash("Bid successful!", "success")
     
