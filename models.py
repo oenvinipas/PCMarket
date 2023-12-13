@@ -15,6 +15,7 @@ class User(db.Model):
         self.email = email
         self.password = password
         self.first_name = first_name
+        
 class Computer(db.Model):
     __tablename__ = "computer"
     

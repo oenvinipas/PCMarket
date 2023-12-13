@@ -1,4 +1,4 @@
-import os
+import os, requests
 from dotenv import load_dotenv
 from flask import Flask, abort, request, redirect, render_template, session, flash
 from models import db, User, Computer, Posts, Comments
@@ -15,11 +15,11 @@ app.config[
 
 app.secret_key = os.getenv("DB_SECRET_KEY", "potato")
 app.permanent_session_lifetime = timedelta(minutes=30)
+imgBBapi_key = os.getenv("imgBB_api_key")
 
 db.init_app(app)
 bcrypt = Bcrypt()
 bcrypt.init_app(app)
-
 
 @app.context_processor
 def inject_data():
@@ -45,6 +45,23 @@ def get_create_listing_page():
 
 @app.post("/create")
 def process_create_listing():
+    if request.method == 'POST':
+        file = request.files['image']
+        upload_url = 'https://api.imgbb.com/1/upload'
+        with file.stream as f:
+            payload = {
+                'key': imgBBapi_key,
+                'image': f.read()
+            }
+            response = requests.post(upload_url, payload)
+        if response.status_code == 200:
+            #store image url into the db
+            image_url = response.json()['data']['url']
+            return render_template('result.html', image_url=image_url)
+        else:
+            error_message = response.text
+            return render_template('error.html', error=error_message)
+    
     description = request.form.get("description")
     name = request.form.get("name")
     price = request.form.get("price")
