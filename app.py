@@ -131,7 +131,6 @@ def process_login_request():
     # first_name = existing_user.first_name
 
     session["email"] = email
-    session["user_id"] = existing_user.user_id
     session["first_name"] = existing_user.first_name
     session["user_id"] = existing_user.user_id
     return redirect("/account")
@@ -261,7 +260,7 @@ def logout():
     del session["first_name"]
     del session["user_id"]
     return redirect("/")
-  
+
 @app.post("/delete/<int:listing_id>")
 def delete_listing(listing_id: int):
     post = Posts.query.get_or_404(listing_id)
