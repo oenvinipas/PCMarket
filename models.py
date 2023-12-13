@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -57,6 +58,8 @@ class Posts(db.Model):
     top_bidder = db.Column(db.Integer, db.ForeignKey("users.user_id")) 
     bid_count = db.Column(db.Integer, default=0)
     bid_days = db.Column(db.Integer, default=0)
+    
+    time_created = datetime.now()
     
     user = db.relationship("User", foreign_keys=[user_id], backref="user_posts", lazy=True)
     computer = db.relationship("Computer", backref="posts", lazy=True)

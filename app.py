@@ -168,15 +168,40 @@ def get_view_of_listing(listing_id: int):
     comment_count = Comments.query.filter_by(post_id=listing_id).count()
 
     # Calculate the end time
-    end_time = datetime.now() + timedelta(days=post.bid_days)
+    end_time = post.time_created + timedelta(days=post.bid_days)
 
     # Calculate the remaining time
-    current_time = end_time - datetime.now()
+    current_time = end_time - post.time_created
 
     days, remainder = divmod(current_time.total_seconds(), 24 * 60 * 60)
-    hours = remainder // 3600
-
-    time_remaining = f"{int(days)} days, {int(hours)} hours"
+    
+    # Check if auction has ended
+    if datetime.now() > end_time:
+        if(post.top_bidder):
+            flash(f"Congratulations to {post.top_bidder} for winning the Auction with a bid of {Computa.price}!", "success")
+            return render_template(
+                "iso-view.html",
+                Computa=Computa,
+                post=post,
+                comment_count=comment_count,
+                time_remaining="Auction Ended",
+            )
+        else: 
+            return render_template(
+                "iso-view.html",
+                Computa=Computa,
+                post=post,
+                comment_count=comment_count,
+                time_remaining="Auction Ended",
+            )
+    
+    if days > 0:
+        hours = remainder // 3600
+        time_remaining = f"{int(days)} days, {int(hours)} hours"
+    else:
+        hours, remainder = divmod(current_time.total_seconds(), 3600)
+        minutes = remainder // 60
+        time_remaining = f"{int(hours)} hours, {int(minutes)} mins"
       
     return render_template(
         "iso-view.html",
@@ -211,6 +236,7 @@ def get_edit_page(listing_id: int):
         current_condition=computa.condition,
         current_rgb=computa.rgb,
         current_comments=computa.description,
+        current_bid_days=post.bid_days,
     )
 
 
@@ -236,6 +262,8 @@ def update_listing(listing_id: int):
     updated_condition = request.form.get("condition")
     updated_rgb = request.form.get("rgb") == "True"
     updated_comments = request.form.get("comments")
+    
+    updated_bid_days = request.form.get("bid_days")
 
     computa.price = updated_price
     computa.name = updated_name
@@ -250,6 +278,8 @@ def update_listing(listing_id: int):
     computa.condition = updated_condition
     computa.rgb = updated_rgb
     computa.comments = updated_comments
+    
+    post.bid_days = updated_bid_days
 
     db.session.commit()
 
