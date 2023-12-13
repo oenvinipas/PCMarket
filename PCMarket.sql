@@ -32,7 +32,10 @@ create table posts
 (
     post_id serial primary key,
     user_id integer references users(user_id),
-    computer_id integer references computer(computer_id)
+    computer_id integer references computer(computer_id),
+    top_bidder integer references users(user_id),
+    bid_count integer default 0,
+    bid_days integer not null
 );
 
 create table comments
