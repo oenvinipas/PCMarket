@@ -131,6 +131,7 @@ def process_login_request():
     # first_name = existing_user.first_name
 
     session["email"] = email
+    session["user_id"] = existing_user.user_id
     session["first_name"] = existing_user.first_name
     session["user_id"] = existing_user.user_id
     return redirect("/account")
@@ -260,7 +261,7 @@ def logout():
     del session["first_name"]
     del session["user_id"]
     return redirect("/")
-
+  
 @app.post("/delete/<int:listing_id>")
 def delete_listing(listing_id: int):
     post = Posts.query.get_or_404(listing_id)
@@ -273,3 +274,14 @@ def delete_listing(listing_id: int):
     db.session.delete(computa)
     db.session.commit()
     return redirect("/")
+  
+@app.post("/create-comment/<int:listing_id>")
+def create_comment(listing_id):
+    comment = request.form.get('comment')
+    user_id = session['user_id']
+
+    new_comment = Comments(user_id=user_id, post_id=listing_id, comment=comment)
+    
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect(f"/view/{listing_id}")

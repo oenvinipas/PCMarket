@@ -1,5 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from pytz import timezone
 
+est=timezone('EST')
 db = SQLAlchemy()
 
 class User(db.Model):
@@ -73,7 +76,7 @@ class Comments(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.post_id"), nullable=False)
     comment = db.Column(db.String(255), nullable=False)
-    
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(est))
     post = db.relationship("Posts", backref="comments", lazy=True)
     user = db.relationship("User", backref="comments", lazy=True)
     
