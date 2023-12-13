@@ -78,12 +78,13 @@
         <div class="col">
             <label for="condition" class="form-label">Condition</label>
             <select class="form-select" aria-label="condition" name="condition" required>
-                <option value="1" {% if current_condition == '1' %}selected{% endif %}>Factory New</option>
-                <option value="2" {% if current_condition == '2' %}selected{% endif %}>Minimal Wear</option>
-                <option value="3" {% if current_condition == '3' %}selected{% endif %}>Field Tested</option>
-                <option value="4" {% if current_condition == '4' %}selected{% endif %}>Well Worn</option>
-                <option value="5" {% if current_condition == '5' %}selected{% endif %}>Battle Scarred</option>
-            </select>
+                <option value="{{ current_condition }}">{{ current_condition }}</option>
+                <option value="Factory New">Factory New</option>
+                <option value="Minimal Wear">Minimal Wear</option>
+                <option value="Field Tested">Field Tested</option>
+                <option value="Well Worn">Well Worn</option>
+                <option value="Battle Scarred">Battle Scarred</option>
+            </select>   
         </div>
         <div class="col">
             <div class="mt-3 p-3">
@@ -103,8 +104,8 @@
         </div>
         <div class="row p-2">
             <div class="col">
-                <label for="comments" class="form-label">Description</label>
-                <textarea type="text" class="form-control border border-dark" id="comments" name ="comments" rows="4" value="{{ current_comments }}"></textarea>
+                <label for="description" class="form-label">Description</label>
+                <textarea type="text" class="form-control border border-dark" id="description" name="description" rows="4" required>{{ current_description }}</textarea>
             </div>
         </div>
         <div class="row">
