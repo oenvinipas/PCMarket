@@ -22,7 +22,7 @@ class Computer(db.Model):
     computer_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), default="computer")
     description = db.Column(db.String(255), default="-")
-    # image = db.Column(db.String(255))    
+    image = db.Column(db.String(255))    
     price = db.Column(db.String(255), nullable=False)
     case = db.Column(db.String(255), default="-")
     motherboard = db.Column(db.String(255), default="-")
@@ -36,9 +36,10 @@ class Computer(db.Model):
     rgb = db.Column(db.Boolean, default=False)
 
     # NEED TO ADD IMAGE => IMAGE INPUT ON FORM
-    def __init__(self, name: str, description: str, price: str, case: str, motherboard: str, cpu: str, gpu: str, ram: str, memory: str, fans: str, power_supply: str, condition: str, rgb: bool) -> None:
+    def __init__(self, name: str, description: str, image: str, price: str, case: str, motherboard: str, cpu: str, gpu: str, ram: str, memory: str, fans: str, power_supply: str, condition: str, rgb: bool) -> None:
         self.name = name
         self.description = description
+        self.image = image
         self.price = price
         self.case = case
         self.motherboard = motherboard
@@ -50,7 +51,6 @@ class Computer(db.Model):
         self.power_supply = power_supply
         self.condition = condition
         self.rgb = rgb
-        #hi
         
 class Posts(db.Model):
     __tablename__ = "posts"
