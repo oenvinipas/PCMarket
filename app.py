@@ -99,6 +99,7 @@ def process_login_request():
     # first_name = existing_user.first_name
 
     session["email"] = email
+    session["user_id"] = existing_user.user_id
     session["first_name"] = existing_user.first_name
     return redirect("/account")
 
@@ -206,3 +207,14 @@ def logout():
     del session["email"]
     del session["first_name"]
     return redirect("/")
+
+@app.post("/create-comment/<int:listing_id>")
+def create_comment(listing_id):
+    comment = request.form.get('comment')
+    user_id = session['user_id']
+
+    new_comment = Comments(user_id=user_id, post_id=listing_id, comment=comment)
+    
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect(f"/view/{listing_id}")
