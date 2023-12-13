@@ -274,3 +274,14 @@ def delete_listing(listing_id: int):
     db.session.delete(computa)
     db.session.commit()
     return redirect("/")
+  
+@app.post("/create-comment/<int:listing_id>")
+def create_comment(listing_id):
+    comment = request.form.get('comment')
+    user_id = session['user_id']
+
+    new_comment = Comments(user_id=user_id, post_id=listing_id, comment=comment)
+    
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect(f"/view/{listing_id}")
