@@ -42,7 +42,7 @@
           </div>
       </div>
     </div>
-    {% if session_user_id != post.user_id %}
+    {% if session_user_id != post.user_id or session_first_name == "Guest" %}
     <form method="POST">
       <div class="mx-auto px-2">
         <div class="input-group w-75 mt-2">
