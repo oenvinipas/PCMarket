@@ -10,7 +10,8 @@
                 {% for computer in Computa %}
                 <div class="col-sm m-2">
                     <div class="card" style="width: 18rem; border: none;">
-                        <img class="card-img-top" src="" alt="pc image">
+                        <!-- Img link goes here -->
+                        <img class="card-img-top" src="{{ computer.image }}" alt="{{ computer.name }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ computer.name }}</h5>
                             <ul>
