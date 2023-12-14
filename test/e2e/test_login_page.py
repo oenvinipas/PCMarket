@@ -11,7 +11,7 @@ def test_get_login_page(test_app):
 
 def test_get_account_page_after_login(test_app):
     hashed_password = bcrypt.generate_password_hash("12345").decode("utf-8")
-    user = User("quandale@gmail.com", hashed_password, "Quandale")
+    user = User("quandale@gmail.com", hashed_password, "Quandale", "Dingle")
     db.session.add(user)
     db.session.commit()
 
@@ -33,7 +33,7 @@ def test_get_account_page_after_login(test_app):
 
 def test_login_functionality(test_app):
     hashed_password = bcrypt.generate_password_hash("12345").decode("utf-8")
-    user = User("quandale2@gmail.com", hashed_password, "Quandale2")
+    user = User("quandale2@gmail.com", hashed_password, "Quandale2", "Dingle")
     db.session.add(user)
     db.session.commit()
 
@@ -49,3 +49,4 @@ def test_login_functionality(test_app):
     user_to_delete = User.query.filter_by(first_name="Quandale2").first()
     db.session.delete(user_to_delete)
     db.session.commit()
+    
