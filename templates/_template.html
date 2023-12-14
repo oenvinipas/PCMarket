@@ -26,9 +26,6 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Listings</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/create">Create a Listing</a>
-                        </li>
                         {% if session_first_name == "Guest" %}
                           <li class="nav-item">
                           <li class="nav-item">
@@ -38,6 +35,9 @@
                               <a class="nav-link" href="/signup">Sign Up</a>
                           </li>
                           {% else %}
+                          <li class="nav-item">
+                            <a class="nav-link" href="/create">Create a Listing</a>
+                          </li>
                           <li class="nav-item">
                               <a class="nav-link" href="/account">Profile</a>
                           </li>
