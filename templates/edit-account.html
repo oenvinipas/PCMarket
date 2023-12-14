@@ -1,0 +1,31 @@
+{% extends '_template.html' %}
+{% block title %}PCMarket | Edit Account{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Edit Account</h1>
+    <form action="/edit-account" method="POST">
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ current_first_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ current_last_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ current_email }}">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="mb-3">
+            <label for="re_password" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="re_password" name="re_password">
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}

@@ -410,3 +410,64 @@ def create_comment(listing_id):
     db.session.add(new_comment)
     db.session.commit()
     return redirect(f"/view/{listing_id}")
+
+@app.get("/edit-account")
+def get_edit_account_page():
+    user_id = session.get("user_id")
+    user = User.query.filter_by(user_id=user_id).first()
+    if user:
+        return render_template("edit-account.html", current_first_name=user.first_name, current_last_name=user.last_name, current_email=user.email)
+    else:
+        flash("User not found", "error")
+        return redirect("/")
+
+@app.post("/edit-account")
+def update_account():
+    user_id = session.get("user_id")
+    user = User.query.filter_by(user_id=user_id).first()
+    if user:
+        user.first_name = request.form.get("first_name")
+        user.last_name = request.form.get("last_name")
+        user.email = request.form.get("email")
+
+        password = request.form.get("password")
+        re_password = request.form.get("re_password")
+
+        if password and re_password and password == re_password:
+            hashed_password = bcrypt.generate_password_hash(password, 12).decode()
+            user.password = hashed_password
+        elif password or re_password:
+            flash("Passwords do not match", "error")
+            return redirect("/edit-account")
+
+        db.session.commit()
+        flash("Account updated successfully", "success")
+        return redirect("/account")
+    else:
+        flash("User not found", "error")
+        return redirect("/")
+
+@app.post("/delete-account")
+def delete_account():
+    if "user_id" not in session:
+        abort(401)
+    user_id = session["user_id"]
+    user = User.query.get_or_404(user_id)
+
+    # delete associated data
+    posts = Posts.query.filter_by(user_id=user_id).all()
+    for post in posts:
+        comments = Comments.query.filter_by(post_id=post.post_id).all()
+        for comment in comments:
+            db.session.delete(comment)
+        db.session.delete(post)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    del session["email"]
+    del session["first_name"]
+    del session["user_id"]
+
+    flash("Your account has been successfully deleted.", "success")
+    return redirect("/signup")

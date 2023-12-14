@@ -16,6 +16,14 @@
                     <h2 class="mt-3">{{ session_first_name }}</h2>
                     <p>Welcome to PCMarket!</p>
                 </div>
+                <div class="col-md-3">
+                    <form action="/delete-account" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete Account</button>
+                    </form>
+                    <form action="/edit-account" method="GET">
+                        <button type="submit" class="btn btn-success">Edit Account</button>
+                    </form>
+                </div>
             </div>
         </main>
     </div>
