@@ -127,7 +127,7 @@ def process_create_listing():
 
         db.session.add(new_computer)
         db.session.commit()
-        new_post = Posts(session["user_id"], new_computer.computer_id)
+        new_post = Posts(session["user_id"], new_computer.computer_id, bid_days)
         db.session.add(new_post)
         db.session.commit()
 
@@ -319,7 +319,7 @@ def update_listing(listing_id: int):
 
             if response.status_code == 200:
                 new_image_url = response.json()["data"]["url"]
-                computa.image_url = new_image_url
+                computa.image = new_image_url
 
     computa.price = updated_price
     computa.name = updated_name
@@ -334,7 +334,7 @@ def update_listing(listing_id: int):
     computa.condition = updated_condition
     computa.rgb = updated_rgb
     computa.description = updated_description
-    
+
     post.bid_days = updated_bid_days
 
     db.session.commit()
