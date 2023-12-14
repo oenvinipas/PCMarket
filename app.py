@@ -218,3 +218,38 @@ def create_comment(listing_id):
     db.session.add(new_comment)
     db.session.commit()
     return redirect(f"/view/{listing_id}")
+
+@app.post("/delete-comment/<int:comment_id>")
+def delete_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+    if "user_id" not in session or session["user_id"] != comment.user_id:
+        abort(401)
+
+    post_id = comment.post.computer_id
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    return redirect(f"/view/{post_id}")
+
+@app.get("/edit-comment/<int:comment_id>")
+def edit_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+
+    if "user_id" not in session or session["user_id"] != comment.user_id:
+        abort(401)
+
+    db.session.commit()
+    return render_template("edit-comment.html", comment=comment)
+
+@app.post("/edit-comment/<int:comment_id>")
+def post_edit_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+    edit_comment = request.form.get("edited_comment")
+    comment.comment = edit_comment
+    post_id = comment.post.computer_id
+
+    db.session.commit()
+
+    return redirect(f"/view/{post_id}")
+    

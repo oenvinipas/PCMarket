@@ -1,0 +1,19 @@
+{% extends '_template.html' %}
+{% block title %}PCMarket | Viewing {{listing_id}}{% endblock %}
+
+{% block body %}
+
+
+
+<!-- Comment Section -->
+<div class="mt-3">
+<form action="/edit-comment/{{ comment.comment_id }}" method="POST">
+    <div class="mb-3">
+        <textarea class="form-control" id="edited_comment" name="edited_comment" rows="2" required>{{ comment.comment }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Comment</button>
+</form>
+
+
+</div>
+{% endblock %}
