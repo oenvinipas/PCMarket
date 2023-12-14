@@ -43,7 +43,9 @@ create table comments
     comment_id serial primary key ,
     post_id integer references posts(post_id),
     user_id integer references users(user_id),
-    comment varchar(255)
+    comment varchar(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+
 );
 
 -- You have to create a account and then make your own "create a listing" as each PC is tied to a post_id in posts table, so dummy data is not here 

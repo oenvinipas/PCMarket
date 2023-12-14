@@ -179,7 +179,7 @@
           <small class="text-muted ms-3">{{ comment.created_at.strftime('%m/%d/%y %H:%M %p') }}</small>
         </div>
         {% if session["user_id"] == comment.user_id %}
-          <a href="/edit-comment/{{ comment.comment_id }}" target="_blank" class="btn btn-sm btn-outline-primary mt-3">Edit</a>
+          <a href="/edit-comment/{{ comment.comment_id }}" class="btn btn-sm btn-outline-primary mt-3">Edit</a>
           <form action="/delete-comment/{{ comment.comment_id }}" method="POST">
             <button type="submit" class="btn btn-sm btn-outline-danger mt-3 w-100">Delete</button>
         </form>
