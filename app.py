@@ -135,7 +135,6 @@ def process_create_listing():
     else:
         error_message = response.text
         flash(f"Image upload failed: {error_message}", "error")
-        # return render_template("error.html", error=error_message)
         return redirect("/create")
 
 @app.get("/login")
@@ -306,6 +305,19 @@ def update_listing(listing_id: int):
     updated_description = request.form.get("description")
     
     updated_bid_days = request.form.get("bid_days")
+
+    if "image" in request.files:
+        new_file = request.files["image"]
+        if new_file.filename != "":
+            imgbb_url = "https://api.imgbb.com/1/upload"
+            files = {"image": (new_file.filename, new_file.read())}
+            params = {"key": imgBBapi_key}
+
+            response = requests.post(imgbb_url, files=files, params=params)
+
+            if response.status_code == 200:
+                new_image_url = response.json()["data"]["url"]
+                computa.image_url = new_image_url
 
     computa.price = updated_price
     computa.name = updated_name
