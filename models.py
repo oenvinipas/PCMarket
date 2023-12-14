@@ -12,12 +12,13 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     first_name = db.Column(db.String(255), nullable=False)
-    last_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255), nullable=False)
     
-    def __init__(self, email: str, password: str, first_name: str) -> None:
+    def __init__(self, email: str, password: str, first_name: str, last_name: str) -> None:
         self.email = email
         self.password = password
         self.first_name = first_name
+        self.last_name = last_name
         
 class Computer(db.Model):
     __tablename__ = "computer"
