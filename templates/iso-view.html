@@ -122,20 +122,7 @@
       <tr>
         <th scope="row">Condition</th>
           <td> 
-              {% if Computa.condition|int == 1 %}
-                  Factory New
-              {% elif Computa.condition|int == 2 %}
-                  Minimal Wear
-              {% elif Computa.condition|int == 3 %}
-                  Field-Tested
-              {% elif Computa.condition|int == 4 %}
-                  Well-Worn
-              {% elif Computa.condition|int == 5 %}
-                  Battle-Scarred
-              {% else %}
-                  Unknown
-              {% endif %}
-
+              {{ Computa.condition }}
           </td>
       </tr>
       <tr>
