@@ -13,7 +13,8 @@ def test_get_login_page_after_signup(test_app):
     response = test_app.post(
         "/signup",
         data={
-            "first_name": "McDonald",
+            "first_name": "Ronald",
+            "last_name": "McDonald",
             "email": "mcdonald@gmail.com",
             "password": "12345",
             "re-password": "12345",
@@ -24,7 +25,7 @@ def test_get_login_page_after_signup(test_app):
 
     assert response.status_code == 200
 
-    user_to_delete = User.query.filter_by(first_name="McDonald").first()
+    user_to_delete = User.query.filter_by(first_name="Ronald").first()
     db.session.delete(user_to_delete)
     db.session.commit()
 
@@ -34,6 +35,7 @@ def test_signup_functionality(test_app):
         "/signup",
         data={
             "first_name": "Mickey",
+            "last_name": "Mouse",
             "email": "mickey@gmail.com",
             "password": "12345",
             "re-password": "12345",
