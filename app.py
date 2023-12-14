@@ -178,11 +178,13 @@ def process_signup_request():
     raw_re_password = request.form.get("re-password")
     email = request.form.get("email")
     first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
     if (
         raw_password != raw_re_password
         or not email
         or not raw_password
         or not first_name
+        or not last_name
     ):
         abort(400)
 
@@ -191,7 +193,7 @@ def process_signup_request():
         abort(400)
 
     hashed_password = bcrypt.generate_password_hash(raw_password, 12).decode()
-    new_user = User(email, hashed_password, first_name)
+    new_user = User(email, hashed_password, first_name, last_name)
     db.session.add(new_user)
     db.session.commit()
     return redirect("/login")

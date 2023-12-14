@@ -6,7 +6,7 @@ create table users
     email varchar(255) not null unique,
     password varchar(255) not null,
     first_name varchar(255) not null,
-    last_name varchar(255)
+    last_name varchar(255) not null
 );
 
 create table computer
