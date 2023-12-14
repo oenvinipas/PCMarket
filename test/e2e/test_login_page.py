@@ -49,3 +49,4 @@ def test_login_functionality(test_app):
     user_to_delete = User.query.filter_by(first_name="Quandale2").first()
     db.session.delete(user_to_delete)
     db.session.commit()
+    
