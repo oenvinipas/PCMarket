@@ -10,8 +10,21 @@
     <p>If the device does not contain one of these or you are unsure, input “N/A”</p>
 </div>
 <div class="container">
-    <form class="border border-dark border-2 bg-light w-50 mx-auto p-3" method="POST" enctype="multipart/form-data" >
-        <p class="p-2 h6 font-weight-bold">Computer Details</p>
+    <form class="border border-dark border-2 bg-light w-50 mx-auto p-3" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+                <p class="p-2 h6 font-weight-bold">Computer Details</p>
+            </div>
+            <div class="col">
+                <!-- This exists for spacing -->
+            </div>
+            <div class="col ml-auto">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Bid Duration" aria-label="Bid Duration" aria-describedby="basic-addon2" id="bid_days" name="bid_days" pattern="\d*"  required>
+                    <span class="input-group-text" id="bid_days">Days</span>
+                </div>
+            </div>
+        </div>
         <div class="row p-2">
             <div class="col">
                 <label for="price" class="form-label">Price</label>
@@ -91,7 +104,7 @@
             <div class="col">
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Image</label>
-                    <input class="form-control" type="file" id="formFile" name="image">
+                    <input class="form-control" type="file" id="formFile" name="image"> <!-- Implement later -->
                 </div>
             </div>
         </div>

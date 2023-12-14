@@ -12,12 +12,13 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     first_name = db.Column(db.String(255), nullable=False)
-    last_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255), nullable=False)
     
-    def __init__(self, email: str, password: str, first_name: str) -> None:
+    def __init__(self, email: str, password: str, first_name: str, last_name: str) -> None:
         self.email = email
         self.password = password
         self.first_name = first_name
+        self.last_name = last_name
         
 class Computer(db.Model):
     __tablename__ = "computer"
@@ -38,7 +39,6 @@ class Computer(db.Model):
     condition = db.Column(db.String(255), default="-")
     rgb = db.Column(db.Boolean, default=False)
 
-    # NEED TO ADD IMAGE => IMAGE INPUT ON FORM
     def __init__(self, name: str, description: str, image: str, price: str, case: str, motherboard: str, cpu: str, gpu: str, ram: str, memory: str, fans: str, power_supply: str, condition: str, rgb: bool) -> None:
         self.name = name
         self.description = description
@@ -61,13 +61,20 @@ class Posts(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     computer_id = db.Column(db.Integer, db.ForeignKey("computer.computer_id"), nullable=False)
+    top_bidder = db.Column(db.Integer, db.ForeignKey("users.user_id")) 
+    bid_count = db.Column(db.Integer, default=0)
+    bid_days = db.Column(db.Integer, default=0)
     
-    user = db.relationship("User", backref="posts", lazy=True)
+    time_created = datetime.now()
+    
+    user = db.relationship("User", foreign_keys=[user_id], backref="user_posts", lazy=True)
     computer = db.relationship("Computer", backref="posts", lazy=True)
+    bidder = db.relationship("User", foreign_keys=[top_bidder], backref="bid_posts", lazy=True)
     
-    def __init__(self, user_id: int, computer_id: int) -> None:
+    def __init__(self, user_id: int, computer_id: int, bid_days: int) -> None:
         self.user_id = user_id
         self.computer_id = computer_id
+        self.bid_days = bid_days
         
 class Comments(db.Model):
     __tablename__ = "comments"

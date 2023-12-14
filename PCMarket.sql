@@ -6,7 +6,7 @@ create table users
     email varchar(255) not null unique,
     password varchar(255) not null,
     first_name varchar(255) not null,
-    last_name varchar(255)
+    last_name varchar(255) not null
 );
 
 create table computer
@@ -32,7 +32,10 @@ create table posts
 (
     post_id serial primary key,
     user_id integer references users(user_id),
-    computer_id integer references computer(computer_id)
+    computer_id integer references computer(computer_id),
+    top_bidder integer references users(user_id),
+    bid_count integer default 0,
+    bid_days integer not null
 );
 
 create table comments
@@ -42,3 +45,5 @@ create table comments
     user_id integer references users(user_id),
     comment varchar(255)
 );
+
+-- You have to create a account and then make your own "create a listing" as each PC is tied to a post_id in posts table, so dummy data is not here 
